@@ -91,10 +91,17 @@ function addExtras (hotel, reservationId, extras) {
     const reservation = hotel.reservations.find(reservation => reservationId === reservation.id);
     if(!reservation) return `La ${reservationId} no existe`;
     if(!reservation.extras) {
-        reservation.extras = extras;
+        reservation.extras = [];
     }
-    extras.map(extra => reservation.extras.push(extra));
-    /*falta agregar el calculo del precio total con los extras*/
+    extras.forEach(extra => reservation.extras.push(extra));
+    //calculamos el precio de los nuevos extras
+    const extraCost= extras.reduce((acc, extra) => {
+        acc += extra.price * extra.quantity;
+        return acc;
+    }, 0);
+    
+    //se lo sumamos al total
+    reservation.totalPrice += extraCost;
     return reservation;
 }
 
