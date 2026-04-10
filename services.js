@@ -93,9 +93,18 @@ function addExtras (hotel, reservationId, extras) {
     if(!reservation.extras) {
         reservation.extras = [];
     }
-    extras.forEach(extra => reservation.extras.push(extra));
+
+    const validExtras = extras.filter(extra => extra.price > 0 && extra.quantity > 0);
+
+    if(validExtras.length === 0) {
+        return 'No hay extras validos para agregar';
+    }
+
+    reservation.extras.push(...validExtras);
+    //validExtras.forEach(extra => reservation.extras.push(extra));
+    
     //calculamos el precio de los nuevos extras
-    const extraCost= extras.reduce((acc, extra) => {
+    const extraCost= validExtras.reduce((acc, extra) => {
         acc += extra.price * extra.quantity;
         return acc;
     }, 0);
@@ -108,3 +117,6 @@ function addExtras (hotel, reservationId, extras) {
 const reservation2 = hotel.reservations.find(reservation => 'RES-001' === reservation.id);
 console.log(reservation2);
 console.log(addExtras(hotel, "RES-001", [{ name: "Parking", price: 15, quantity: 5 }]));
+
+
+
