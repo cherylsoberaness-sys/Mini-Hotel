@@ -84,8 +84,8 @@ const hotel = {
                 phone: "+34 612345678",
                 dni: "12345678A"
             },
-            checkIn: "2026-01-20",
-            checkOut: "2026-01-25",
+            checkIn: "2026-04-11",
+            checkOut: "2026-04-20",
             nights: 5,
             totalPrice: 250,
             status: "confirmed",

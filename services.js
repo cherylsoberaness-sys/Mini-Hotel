@@ -71,21 +71,6 @@ function isOverlap (hotel, roomNumber, checkIn, checkOut) {
         return overlap;
     }
     
-const reservation = creteReservation (
-    hotel, 
-    101, 
-    {
-        name: 'Cheryl Soberanes', 
-        email: 'cherylsoberanes@gmail.com', 
-        phone: '+34 612345678', 
-        dni: '12345678A'
-    },
-    '2026-04-05',
-    '2026-04-09'
-);
-    
-console.log(reservation);
-
 
 function addExtras (hotel, reservationId, extras) {
     const reservation = hotel.reservations.find(reservation => reservationId === reservation.id);
@@ -114,9 +99,32 @@ function addExtras (hotel, reservationId, extras) {
     return reservation;
 }
 
-const reservation2 = hotel.reservations.find(reservation => 'RES-001' === reservation.id);
-console.log(reservation2);
-console.log(addExtras(hotel, "RES-001", [{ name: "Parking", price: 15, quantity: 5 }]));
 
+function checkIn(hotel, reservationId) {
+    //buscamos la reserva
+    const reservation = hotel.reservations.find(r => r.id === reservationId);
 
+    if(!reservation) return `La reservacion ${reservationId} no existe`; 
+    if(reservation.status !== 'confirmed') return `la reservacion no está confirmada`;
+
+    const today = new Date();
+    const checkInDate = new Date(reservation.checkIn + 'T00:00:00');
+
+    if(today < checkInDate) return `fecha actual invalida: debe ser igual o posterior al check in previsto`;
+
+    //buscamos la habitacion y validamos que exista
+    const room = hotel.rooms.find(r => r.number === reservation.roomNumber);
+    if(!room) {
+        return `la habitacion ${roomNumber} no existe`;
+    }
+
+    //cambiamos el estatus de la reserva a checked-in y de la habitacion a ocupada y tambien cambiamos la hora del
+    //check in a la hora y dia actual.
+    reservation.status = "checked-in"
+    room.status = 'occupied';
+    reservation.checkIn = new Date().toISOString();
+
+    return `checkin para la reserva ${reservationId} confirmado con fecha: ${reservation.checkIn}`;
+    
+}
 
